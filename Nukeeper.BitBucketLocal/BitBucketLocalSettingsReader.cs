@@ -50,12 +50,22 @@ namespace NuKeeper.BitBucketLocal
             var repoName = pathParts[pathParts.Count - 1].ToLower(CultureInfo.CurrentCulture).Replace(".git", string.Empty);
             var project = pathParts[pathParts.Count - 2];
 
+            RemoteInfo remoteInfo = null;
+            if (!string.IsNullOrEmpty(targetBranch))
+            {
+                remoteInfo = new RemoteInfo
+                {
+                    BranchName = targetBranch
+                };
+            }
+
             return Task.FromResult(new RepositorySettings
             {
                 ApiUri = new Uri($"{repositoryUri.Scheme}://{repositoryUri.Authority}"),
                 RepositoryUri = repositoryUri,
                 RepositoryName = repoName,
-                RepositoryOwner = project
+                RepositoryOwner = project,
+                RemoteInfo = remoteInfo
             });
         }
 
